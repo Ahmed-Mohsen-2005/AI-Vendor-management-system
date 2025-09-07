@@ -3,7 +3,7 @@ import React from 'react';
 export default function NDAManagement() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' }}>
-
+      
       {/* Main Content */}
       <main style={{ flex: 1, padding: '30px' }}>
         
