@@ -184,7 +184,7 @@ export default function Dashboard() {
                       <span className="text-xs text-muted-foreground">
                         {getStatusText(step.status)}
                       </span>
-                      {step.id < workflowSteps.length && (
+                      {step.id <= workflowSteps.length && (
                     step.name === "NDA" ? (
                       <Link href="/nda">
                         <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
@@ -211,6 +211,10 @@ export default function Dashboard() {
                       </Link>
                     ): step.name === "Review" ? (
                       <Link href="/review">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ): step.name === "Invoicing" ? (
+                      <Link href="/invoicing">
                         <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
                       </Link>
                     ): (

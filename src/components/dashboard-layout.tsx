@@ -35,7 +35,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex">
       {/* Mobile sidebar */}
       <div className={cn(
         "fixed inset-0 z-50 lg:hidden",
@@ -87,72 +87,71 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:bg-white lg:dark:bg-slate-800 lg:border-r lg:border-slate-200 lg:dark:border-slate-700">
-        <div className="flex flex-col h-full">
-          <div className="flex items-center space-x-2 p-6 border-b">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold">VM</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold">Smart Vendor</h1>
-              <p className="text-xs text-muted-foreground">Management Platform</p>
-            </div>
+      <div className="hidden lg:flex lg:flex-col lg:w-64 lg:bg-white lg:dark:bg-slate-800 lg:border-r lg:border-slate-200 lg:dark:border-slate-700">
+        <div className="flex items-center space-x-2 p-6 border-b">
+          <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold">VM</span>
           </div>
-          
-          <nav className="flex-1 p-4 space-y-2">
-            {navigation.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
-                      : "text-muted-foreground hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-700/50"
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </Link>
-              );
-            })}
-          </nav>
+          <div>
+            <h1 className="text-lg font-semibold">AI Vendor</h1>
+            <p className="text-xs text-muted-foreground">Management Platform</p>
+          </div>
+        </div>
+        
+        <nav className="flex-1 p-4 space-y-2">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
+                    : "text-muted-foreground hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-700/50"
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-          <div className="p-4 border-t space-y-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Active Workflow</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <p className="text-xs text-muted-foreground">Current Step</p>
-                  <p className="text-sm font-semibold">Vendor Evaluation</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Progress</p>
-                  <Progress value={60} className="mt-1" />
-                </div>
-                <Badge variant="secondary" className="text-xs">
-                  ETA: 3 days
-                </Badge>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="p-4 border-t space-y-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Active Workflow</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <p className="text-xs text-muted-foreground">Current Step</p>
+                <p className="text-sm font-semibold">Vendor Evaluation</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Progress</p>
+                <Progress value={60} className="mt-1" />
+              </div>
+              <Badge variant="secondary" className="text-xs">
+                ETA: 3 days
+              </Badge>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="flex-1 flex flex-col">
         <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between px-4 py-3">
             <Button
               variant="ghost"
               size="sm"
               className="lg:hidden"
-              onClick={() => setSidebarOpen(true)}>
+              onClick={() => setSidebarOpen(true)}
+            >
               <Menu className="h-4 w-4" />
             </Button>
             <div className="flex-1 max-w-md">
@@ -173,7 +172,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
-        <main className="p-6">
+        <main className="flex-1 p-6">
           {children}
         </main>
       </div>
