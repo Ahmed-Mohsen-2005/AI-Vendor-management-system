@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     title: "AI Vendor managment",
     description: "AI-powered development with modern React stack",
     type: "website",
+  },
+  icons: {
+    icon: "/ai_vendor_logo.png",   // your icon in /public
   }
 };
 

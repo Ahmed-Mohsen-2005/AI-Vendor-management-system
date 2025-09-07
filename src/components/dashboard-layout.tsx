@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -85,18 +85,24 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </nav>
         </div>
       </div>
+{/* Desktop sidebar */}
+<div className="hidden lg:flex lg:flex-col lg:w-64 lg:bg-white lg:dark:bg-slate-800 lg:border-r lg:border-slate-200 lg:dark:border-slate-700">
+  <div className="flex items-center space-x-2 p-6 border-b">
+    <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
+      <Image
+        src="/ai_vendor_logo.png"       
+        alt="AI Vendor Logo"
+        width={40}
+        height={40}
+        className="object-contain"
+      />
+    </div>
+    <div>
+      <h1 className="text-lg font-semibold">AI Vendor</h1>
+      <p className="text-xs text-muted-foreground">Management Platform</p>
+    </div>
+  </div>
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:flex-col lg:w-64 lg:bg-white lg:dark:bg-slate-800 lg:border-r lg:border-slate-200 lg:dark:border-slate-700">
-        <div className="flex items-center space-x-2 p-6 border-b">
-          <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold">VM</span>
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold">AI Vendor</h1>
-            <p className="text-xs text-muted-foreground">Management Platform</p>
-          </div>
-        </div>
         
         <nav className="flex-1 p-4 space-y-2">
           {navigation.map((item) => {
