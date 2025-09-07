@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 import { 
   Users, 
   FileText, 
@@ -183,8 +185,39 @@ export default function Dashboard() {
                         {getStatusText(step.status)}
                       </span>
                       {step.id < workflowSteps.length && (
-                        <ArrowRight className="h-3 w-3 text-muted-foreground" />
-                      )}
+                    step.name === "NDA" ? (
+                      <Link href="/nda">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ) : step.name === "RFP" ? (
+                      <Link href="/rfp-check">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ) : step.name === "Screening" ? (
+                      <Link href="/screening">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ): step.name === "Contracting" ? (
+                      <Link href="/contracts">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ) : step.name === "Evaluation" ? (
+                      <Link href="/evaluations">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ) : step.name === "Awarding" ? (
+                      <Link href="/awarding">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ): step.name === "Review" ? (
+                      <Link href="/review">
+                        <ArrowRight className="h-3 w-3 text-blue-500 cursor-pointer hover:scale-110 transition" />
+                      </Link>
+                    ): (
+                      <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                    )
+                    )}
+
                     </div>
                   </CardContent>
                 </Card>

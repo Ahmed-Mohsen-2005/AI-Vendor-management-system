@@ -152,8 +152,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               variant="ghost"
               size="sm"
               className="lg:hidden"
-              onClick={() => setSidebarOpen(true)}
-            >
+              onClick={() => setSidebarOpen(true)}>
               <Menu className="h-4 w-4" />
             </Button>
             <div className="flex-1 max-w-md">
