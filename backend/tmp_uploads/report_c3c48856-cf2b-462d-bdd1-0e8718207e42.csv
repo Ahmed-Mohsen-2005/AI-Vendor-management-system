@@ -1,0 +1,2 @@
+Invoice,Invoice_Total,Sufficient,Vendor,Due_Date,Status,Checks
+6a665a46-2271-486d-9db0-ce422a1511f7_Invoice1PO1.pdf,419043.86,Yes,Vendor 1,2024-12-31,Approved,"{'Line Items': True, 'Sales Total': True, 'Grand Total': True}"

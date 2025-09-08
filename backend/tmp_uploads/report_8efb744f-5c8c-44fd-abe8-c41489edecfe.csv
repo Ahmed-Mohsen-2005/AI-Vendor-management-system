@@ -1,0 +1,5 @@
+Invoice,Invoice_Total,Sufficient,Vendor,Due_Date,Status,Checks
+ead262fe-f657-4275-b314-d04619804a9d_Invoice1PO1.pdf,419043.86,Yes,Vendor 1,2024-12-31,Approved,"{'Line Items': True, 'Sales Total': True, 'Grand Total': True}"
+e1800872-f138-4c0e-b0d2-5c773c30316d_Invoice2PO1.pdf,838087.72,Yes,Vendor 2,2024-12-31,Approved,"{'Line Items': True, 'Sales Total': True, 'Grand Total': True}"
+8ffa831b-764a-421e-a943-95340d73ab68_Invoice3PO1.pdf,209771.93,No,Vendor 3,2024-12-31,Pending Approval,"{'Line Items': True, 'Sales Total': True, 'Grand Total': True}"
+7e73a51d-9411-4163-bbce-8b3b60d74b81_Invoice4PO1.pdf,456000.0,No,Vendor 4,2024-12-31,Pending Approval,"{'Line Items': False, 'Sales Total': True, 'Grand Total': True}"
