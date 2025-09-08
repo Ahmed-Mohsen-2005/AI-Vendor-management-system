@@ -18,63 +18,63 @@ import {
 } from "lucide-react";
 
 export default function ContractsPage() {
-  const contracts = [
-    {
-      id: "CT-001",
-      vendor: "ACME Corporation",
-      title: "Cloud Infrastructure Services",
-      value: "$1,250,000",
-      startDate: "2024-01-15",
-      endDate: "2025-01-14",
-      status: "active",
-      type: "Service Agreement",
-      renewal: "Auto-renewal"
-    },
-    {
-      id: "CT-002", 
-      vendor: "TechCorp Solutions",
-      title: "Software Development",
-      value: "$850,000",
-      startDate: "2024-03-01",
-      endDate: "2024-12-31",
-      status: "active",
-      type: "Fixed Price",
-      renewal: "Manual review"
-    },
-    {
-      id: "CT-003",
-      vendor: "Global Systems Ltd",
-      title: "Network Security Services",
-      value: "$650,000", 
-      startDate: "2023-08-15",
-      endDate: "2024-08-14",
-      status: "expiring",
-      type: "Service Agreement",
-      renewal: "30 days notice"
-    },
-    {
-      id: "CT-004",
-      vendor: "DataFlow Inc",
-      title: "Data Analytics Platform",
-      value: "$450,000",
-      startDate: "2024-02-01",
-      endDate: "2025-01-31",
-      status: "active",
-      type: "Subscription",
-      renewal: "Auto-renewal"
-    },
-    {
-      id: "CT-005",
-      vendor: "SecureNet Technologies",
-      title: "Cybersecurity Assessment",
-      value: "$320,000",
-      startDate: "2024-04-15",
-      endDate: "2024-10-14",
-      status: "pending",
-      type: "Project-based",
-      renewal: "One-time"
-    }
-  ];
+  // const contracts = [
+  //   {
+  //     id: "CT-001",
+  //     vendor: "ACME Corporation",
+  //     title: "Cloud Infrastructure Services",
+  //     value: "$1,250,000",
+  //     startDate: "2024-01-15",
+  //     endDate: "2025-01-14",
+  //     status: "active",
+  //     type: "Service Agreement",
+  //     renewal: "Auto-renewal"
+  //   },
+  //   {
+  //     id: "CT-002", 
+  //     vendor: "TechCorp Solutions",
+  //     title: "Software Development",
+  //     value: "$850,000",
+  //     startDate: "2024-03-01",
+  //     endDate: "2024-12-31",
+  //     status: "active",
+  //     type: "Fixed Price",
+  //     renewal: "Manual review"
+  //   },
+  //   {
+  //     id: "CT-003",
+  //     vendor: "Global Systems Ltd",
+  //     title: "Network Security Services",
+  //     value: "$650,000", 
+  //     startDate: "2023-08-15",
+  //     endDate: "2024-08-14",
+  //     status: "expiring",
+  //     type: "Service Agreement",
+  //     renewal: "30 days notice"
+  //   },
+  //   {
+  //     id: "CT-004",
+  //     vendor: "DataFlow Inc",
+  //     title: "Data Analytics Platform",
+  //     value: "$450,000",
+  //     startDate: "2024-02-01",
+  //     endDate: "2025-01-31",
+  //     status: "active",
+  //     type: "Subscription",
+  //     renewal: "Auto-renewal"
+  //   },
+  //   {
+  //     id: "CT-005",
+  //     vendor: "SecureNet Technologies",
+  //     title: "Cybersecurity Assessment",
+  //     value: "$320,000",
+  //     startDate: "2024-04-15",
+  //     endDate: "2024-10-14",
+  //     status: "pending",
+  //     type: "Project-based",
+  //     renewal: "One-time"
+  //   }
+  // ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
