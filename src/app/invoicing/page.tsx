@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -77,7 +76,7 @@ export default function InvoicingPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        throw new Error(Server error: ${response.status});
       }
 
       const data: InvoiceResult = await response.json();
