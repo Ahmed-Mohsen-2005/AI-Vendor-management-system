@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,7 @@ export default function InvoicingPage() {
     invoiceFiles.forEach((file) => formData.append("invoices", file));
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/process_invoices/", {
+      const response = await fetch("http://localhost:8000/process_invoices", {
         method: "POST",
         body: formData,
       });
