@@ -1,105 +1,618 @@
+// // "use client";
+
+// // import { useState } from "react";
+// // import { DashboardLayout } from "@/components/dashboard-layout";
+// // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// // import { Button } from "@/components/ui/button";
+// // import { Upload, FileCheck, Loader2 } from "lucide-react";
+// // import {
+// //   Table,
+// //   TableBody,
+// //   TableCell,
+// //   TableHead,
+// //   TableHeader,
+// //   TableRow,
+// // } from "@/components/ui/table";
+
+// // export default function ContractsPage() {
+// //   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+// //   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+// //   const [allTableData, setAllTableData] = useState<any[]>([]);
+// //   const [isUploading, setIsUploading] = useState(false);
+// //   const [isProcessing, setIsProcessing] = useState(false);
+// //   const [error, setError] = useState<string | null>(null);
+
+// //   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+// //     const file = event.target.files?.[0];
+// //     if (file) {
+// //       setSelectedFile(file);
+// //       setError(null);
+// //     }
+// //   };
+
+// //   const handleUpload = async () => {
+// //     if (!selectedFile) return;
+
+// //     setIsUploading(true);
+// //     setError(null);
+
+// //     const formData = new FormData();
+// //     formData.append("file", selectedFile);
+
+// //     try {
+// //       const res = await fetch("http://127.0.0.1:8000/upload-contract/", {
+// //         method: "POST",
+// //         body: formData,
+// //       });
+
+// //       if (!res.ok) throw new Error(`Upload failed: ${res.status} ${res.statusText}`);
+
+// //       const data = await res.json();
+// //       setUploadedFileName(data.filename);
+// //       alert("File uploaded successfully!");
+// //     } catch (error) {
+// //       console.error("Upload failed:", error);
+// //       setError(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+// //     } finally {
+// //       setIsUploading(false);
+// //     }
+// //   };
+
+// //   const handleProcess = async () => {
+// //     if (!uploadedFileName) {
+// //       alert("Please upload a file first!");
+// //       return;
+// //     }
+
+// //     setIsProcessing(true);
+// //     setError(null);
+
+// //     try {
+// //       const res = await fetch("http://127.0.0.1:8000/process-contract/", {
+// //         method: "POST",
+// //         headers: { "Content-Type": "application/json" },
+// //         body: JSON.stringify({ filename: uploadedFileName }),
+// //       });
+
+// //       if (!res.ok) throw new Error(`Processing failed: ${res.status} ${res.statusText}`);
+
+// //       const data = await res.json();
+// //       if (data.error) throw new Error(data.error);
+
+// //       // Merge existingMissingData + contractContentData into one
+// //       const mergedData = [
+// //         ...(data.existing_missing || []).map((row: any) => ({
+// //           section: row.section || "-",
+// //           item: row.item || "-",
+// //           status: row.status || "-",
+// //           detail: row.detail || "-",
+// //         })),
+// //         ...(data.contract_content || []).map((row: any) => ({
+// //           section: row.section || "-",
+// //           item: row.item || "-",
+// //           status: row.status || "-",
+// //           detail: row.detail || "-",
+// //         })),
+// //       ];
+
+// //       setAllTableData(mergedData);
+// //     } catch (error) {
+// //       console.error("Processing failed:", error);
+// //       setError(`Processing failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+// //     } finally {
+// //       setIsProcessing(false);
+// //     }
+// //   };
+
+// //   const getStatusColor = (status: string) => {
+// //     return status?.toLowerCase() === "exists"
+// //       ? "text-green-600 bg-green-100"
+// //       : status?.toLowerCase() === "missing"
+// //       ? "text-red-600 bg-red-100"
+// //       : "text-gray-600 bg-gray-100";
+// //   };
+
+// //   return (
+// //     <DashboardLayout>
+// //       <div className="space-y-6">
+// //         {/* Header */}
+// //         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+// //           <div>
+// //             <h1 className="text-3xl font-bold tracking-tight">
+// //               Contract Management
+// //             </h1>
+// //             <p className="text-muted-foreground mt-1">
+// //               Upload and process your contracts
+// //             </p>
+// //           </div>
+// //         </div>
+
+// //         {/* Error Display */}
+// //         {error && (
+// //           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+// //             {error}
+// //           </div>
+// //         )}
+
+// //         {/* Upload + Process Controls */}
+// //         <div className="flex gap-3">
+// //           <input
+// //             type="file"
+// //             id="fileInput"
+// //             accept=".pdf"
+// //             className="hidden"
+// //             onChange={handleFileChange}
+// //           />
+// //           <Button
+// //             onClick={() => document.getElementById("fileInput")?.click()}
+// //             className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600"
+// //             disabled={isUploading || isProcessing}
+// //           >
+// //             <Upload className="h-4 w-4 mr-2" />
+// //             Choose File
+// //           </Button>
+// //           <Button
+// //             onClick={handleUpload}
+// //             disabled={!selectedFile || isUploading || isProcessing}
+// //           >
+// //             {isUploading ? (
+// //               <>
+// //                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+// //                 Uploading...
+// //               </>
+// //             ) : (
+// //               "Upload Contract"
+// //             )}
+// //           </Button>
+// //           <Button
+// //             onClick={handleProcess}
+// //             disabled={!uploadedFileName || isUploading || isProcessing}
+// //           >
+// //             {isProcessing ? (
+// //               <>
+// //                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+// //                 Processing...
+// //               </>
+// //             ) : (
+// //               <>
+// //                 <FileCheck className="h-4 w-4 mr-2" />
+// //                 Process Contract
+// //               </>
+// //             )}
+// //           </Button>
+// //         </div>
+
+// //         {/* Unified Table */}
+// //         <Card className="w-full">
+// //           <CardHeader>
+// //             <CardTitle>Contract Overview</CardTitle>
+// //           </CardHeader>
+// //           <CardContent>
+// //             {allTableData.length > 0 ? (
+// //               <div className="overflow-x-auto w-full">
+// //                 <Table className="min-w-full">
+// //                   <TableHeader>
+// //                     <TableRow>
+// //                       <TableHead>Section</TableHead>
+// //                       <TableHead>Item</TableHead>
+// //                       <TableHead>Status</TableHead>
+// //                       <TableHead>Detail</TableHead>
+// //                     </TableRow>
+// //                   </TableHeader>
+// //                   <TableBody>
+// //                     {allTableData.map((row, index) => (
+// //                       <TableRow key={index}>
+// //                         <TableCell className="font-medium">{row.section}</TableCell>
+// //                         <TableCell>{row.item}</TableCell>
+// //                         <TableCell>
+// //                           <span className={`px-2 py-1 rounded ${getStatusColor(row.status)}`}>
+// //                             {row.status}
+// //                           </span>
+// //                         </TableCell>
+// //                         <TableCell>{row.detail}</TableCell>
+// //                       </TableRow>
+// //                     ))}
+// //                   </TableBody>
+// //                 </Table>
+// //               </div>
+// //             ) : (
+// //               <p className="text-muted-foreground text-sm">
+// //                 {isProcessing ? "Processing contract..." : "Process a contract to see results."}
+// //               </p>
+// //             )}
+// //           </CardContent>
+// //         </Card>
+// //       </div>
+// //     </DashboardLayout>
+// //   );
+// // }
+// "use client";
+
+// import { useState } from "react";
+// import { DashboardLayout } from "@/components/dashboard-layout";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Button } from "@/components/ui/button";
+// import { Upload, FileCheck, Loader2 } from "lucide-react";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+
+// export default function ContractsPage() {
+//   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+//   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+//   const [allTableData, setAllTableData] = useState<any[]>([]);
+//   const [isUploading, setIsUploading] = useState(false);
+//   const [isProcessing, setIsProcessing] = useState(false);
+//   const [error, setError] = useState<string | null>(null);
+
+//   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0];
+//     if (file) {
+//       setSelectedFile(file);
+//       setError(null);
+//     }
+//   };
+
+//   const handleUpload = async () => {
+//     if (!selectedFile) return;
+
+//     setIsUploading(true);
+//     setError(null);
+
+//     const formData = new FormData();
+//     formData.append("file", selectedFile);
+
+//     try {
+//       const res = await fetch("http://127.0.0.1:8000/upload-contract/", {
+//         method: "POST",
+//         body: formData,
+//       });
+
+//       if (!res.ok) throw new Error(`Upload failed: ${res.status} ${res.statusText}`);
+
+//       const data = await res.json();
+//       setUploadedFileName(data.filename);
+//       alert("File uploaded successfully!");
+//     } catch (error) {
+//       console.error("Upload failed:", error);
+//       setError(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+//     } finally {
+//       setIsUploading(false);
+//     }
+//   };
+
+//   const handleProcess = async () => {
+//     if (!uploadedFileName) {
+//       alert("Please upload a file first!");
+//       return;
+//     }
+
+//     setIsProcessing(true);
+//     setError(null);
+
+//     try {
+//       const res = await fetch("http://127.0.0.1:8000/process-contract/", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ filename: uploadedFileName }),
+//       });
+
+//       if (!res.ok) throw new Error(`Processing failed: ${res.status} ${res.statusText}`);
+
+//       const data = await res.json();
+//       if (data.error) throw new Error(data.error);
+
+//       // Merge into a map keyed by item to avoid duplicates
+//       const mergedMap: Record<string, any> = {};
+
+//       // First: existing/missing
+//       (data.existing_missing || []).forEach((row: any) => {
+//         const key = row.item || row.section || "-";
+//         mergedMap[key] = {
+//           section: row.section || "-",
+//           item: row.item || "-",
+//           status: row.status || "-",
+//           detail: row.detail || "-",
+//         };
+//       });
+
+//       // Then: contract content (overrides/extends if exists)
+//       (data.contract_content || []).forEach((row: any) => {
+//         const key = row.item || row.section || "-";
+//         if (mergedMap[key]) {
+//           // Merge into existing
+//           mergedMap[key] = {
+//             ...mergedMap[key],
+//             section: row.section || mergedMap[key].section,
+//             detail: row.detail || mergedMap[key].detail,
+//             // keep status if already present
+//           };
+//         } else {
+//           mergedMap[key] = {
+//             section: row.section || "-",
+//             item: row.item || "-",
+//             status: row.status || "-",
+//             detail: row.detail || "-",
+//           };
+//         }
+//       });
+
+//       // Convert back to array
+//       setAllTableData(Object.values(mergedMap));
+//     } catch (error) {
+//       console.error("Processing failed:", error);
+//       setError(`Processing failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+//     } finally {
+//       setIsProcessing(false);
+//     }
+//   };
+
+//   const getStatusColor = (status: string) => {
+//     return status?.toLowerCase() === "exists"
+//       ? "text-green-600 bg-green-100"
+//       : status?.toLowerCase() === "missing"
+//       ? "text-red-600 bg-red-100"
+//       : "text-gray-600 bg-gray-100";
+//   };
+
+//   return (
+//     <DashboardLayout>
+//       <div className="space-y-6">
+//         {/* Header */}
+//         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+//           <div>
+//             <h1 className="text-3xl font-bold tracking-tight">
+//               Contract Management
+//             </h1>
+//             <p className="text-muted-foreground mt-1">
+//               Upload and process your contracts
+//             </p>
+//           </div>
+//         </div>
+
+//         {/* Error Display */}
+//         {error && (
+//           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+//             {error}
+//           </div>
+//         )}
+
+//         {/* Upload + Process Controls */}
+//         <div className="flex gap-3">
+//           <input
+//             type="file"
+//             id="fileInput"
+//             accept=".pdf"
+//             className="hidden"
+//             onChange={handleFileChange}
+//           />
+//           <Button
+//             onClick={() => document.getElementById("fileInput")?.click()}
+//             className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600"
+//             disabled={isUploading || isProcessing}
+//           >
+//             <Upload className="h-4 w-4 mr-2" />
+//             Choose File
+//           </Button>
+//           <Button
+//             onClick={handleUpload}
+//             disabled={!selectedFile || isUploading || isProcessing}
+//           >
+//             {isUploading ? (
+//               <>
+//                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+//                 Uploading...
+//               </>
+//             ) : (
+//               "Upload Contract"
+//             )}
+//           </Button>
+//           <Button
+//             onClick={handleProcess}
+//             disabled={!uploadedFileName || isUploading || isProcessing}
+//           >
+//             {isProcessing ? (
+//               <>
+//                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+//                 Processing...
+//               </>
+//             ) : (
+//               <>
+//                 <FileCheck className="h-4 w-4 mr-2" />
+//                 Process Contract
+//               </>
+//             )}
+//           </Button>
+//         </div>
+
+//         {/* Unified Table */}
+//         <Card className="w-full">
+//           <CardHeader>
+//             <CardTitle>Contract Overview</CardTitle>
+//           </CardHeader>
+//           <CardContent>
+//             {allTableData.length > 0 ? (
+//               <div className="overflow-x-auto w-full">
+//                 <Table className="min-w-full">
+//                   <TableHeader>
+//                     <TableRow>
+//                       <TableHead className="w-[15%]">Section</TableHead>
+//                       <TableHead className="w-[10%]">Status</TableHead>
+//                       <TableHead className="w-[60%]">Detail</TableHead>
+//                     </TableRow>
+//                   </TableHeader>
+//                   <TableBody>
+//                     {allTableData.map((row, index) => (
+//                       <TableRow key={index}>
+//                         <TableCell className="font-medium">{row.section}</TableCell>
+                        
+//                         <TableCell>
+//                           <span className={`px-2 py-1 rounded ${getStatusColor(row.status)}`}>
+//                             {row.status}
+//                           </span>
+//                         </TableCell>
+//                         <TableCell className="break-words max-w-[300px]">
+//                           {row.detail}
+//                         </TableCell>
+//                       </TableRow>
+//                     ))}
+//                   </TableBody>
+//                 </Table>
+//               </div>
+//             ) : (
+//               <p className="text-muted-foreground text-sm">
+//                 {isProcessing ? "Processing contract..." : "Process a contract to see results."}
+//               </p>
+//             )}
+//           </CardContent>
+//         </Card>
+//       </div>
+//     </DashboardLayout>
+//   );
+// }
+
+
+"use client";
+
+import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { 
-  FileText, 
-  Search, 
-  Download, 
-  Eye, 
-  Edit, 
-  Plus,
-  Calendar,
-  DollarSign,
-  AlertTriangle,
-  CheckCircle
-} from "lucide-react";
+import { Upload, FileCheck, Loader2, Calendar, DollarSign } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function ContractsPage() {
-  // const contracts = [
-  //   {
-  //     id: "CT-001",
-  //     vendor: "ACME Corporation",
-  //     title: "Cloud Infrastructure Services",
-  //     value: "$1,250,000",
-  //     startDate: "2024-01-15",
-  //     endDate: "2025-01-14",
-  //     status: "active",
-  //     type: "Service Agreement",
-  //     renewal: "Auto-renewal"
-  //   },
-  //   {
-  //     id: "CT-002", 
-  //     vendor: "TechCorp Solutions",
-  //     title: "Software Development",
-  //     value: "$850,000",
-  //     startDate: "2024-03-01",
-  //     endDate: "2024-12-31",
-  //     status: "active",
-  //     type: "Fixed Price",
-  //     renewal: "Manual review"
-  //   },
-  //   {
-  //     id: "CT-003",
-  //     vendor: "Global Systems Ltd",
-  //     title: "Network Security Services",
-  //     value: "$650,000", 
-  //     startDate: "2023-08-15",
-  //     endDate: "2024-08-14",
-  //     status: "expiring",
-  //     type: "Service Agreement",
-  //     renewal: "30 days notice"
-  //   },
-  //   {
-  //     id: "CT-004",
-  //     vendor: "DataFlow Inc",
-  //     title: "Data Analytics Platform",
-  //     value: "$450,000",
-  //     startDate: "2024-02-01",
-  //     endDate: "2025-01-31",
-  //     status: "active",
-  //     type: "Subscription",
-  //     renewal: "Auto-renewal"
-  //   },
-  //   {
-  //     id: "CT-005",
-  //     vendor: "SecureNet Technologies",
-  //     title: "Cybersecurity Assessment",
-  //     value: "$320,000",
-  //     startDate: "2024-04-15",
-  //     endDate: "2024-10-14",
-  //     status: "pending",
-  //     type: "Project-based",
-  //     renewal: "One-time"
-  //   }
-  // ];
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const [allTableData, setAllTableData] = useState<any[]>([]);
+  const [additionalInfo, setAdditionalInfo] = useState<any>({});
+  const [isUploading, setIsUploading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "active":
-        return <Badge className="bg-green-100 text-green-800">Active</Badge>;
-      case "expiring":
-        return <Badge className="bg-orange-100 text-orange-800">Expiring</Badge>;
-      case "pending":
-        return <Badge className="bg-blue-100 text-blue-800">Pending</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setError(null);
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "active":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "expiring":
-        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-      case "pending":
-        return <Calendar className="h-4 w-4 text-blue-500" />;
-      default:
-        return <FileText className="h-4 w-4 text-gray-500" />;
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/upload-contract/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error(`Upload failed: ${res.status} ${res.statusText}`);
+
+      const data = await res.json();
+      setUploadedFileName(data.filename);
+      alert("File uploaded successfully!");
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setError(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+    } finally {
+      setIsUploading(false);
     }
+  };
+
+  const handleProcess = async () => {
+    if (!uploadedFileName) {
+      alert("Please upload a file first!");
+      return;
+    }
+
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/process-contract/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: uploadedFileName }),
+      });
+
+      if (!res.ok) throw new Error(`Processing failed: ${res.status} ${res.statusText}`);
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      // Merge into a map keyed by item to avoid duplicates
+      const mergedMap: Record<string, any> = {};
+
+      // First: existing/missing
+      (data.existing_missing || []).forEach((row: any) => {
+        const key = row.item || row.section || "-";
+        mergedMap[key] = {
+          section: row.section || "-",
+          item: row.item || "-",
+          status: row.status || "-",
+          detail: row.detail || "-",
+        };
+      });
+
+      // Then: contract content (overrides/extends if exists)
+      (data.contract_content || []).forEach((row: any) => {
+        const key = row.item || row.section || "-";
+        if (mergedMap[key]) {
+          // Merge into existing
+          mergedMap[key] = {
+            ...mergedMap[key],
+            section: row.section || mergedMap[key].section,
+            detail: row.detail || mergedMap[key].detail,
+            // keep status if already present
+          };
+        } else {
+          mergedMap[key] = {
+            section: row.section || "-",
+            item: row.item || "-",
+            status: row.status || "-",
+            detail: row.detail || "-",
+          };
+        }
+      });
+
+      // Convert back to array
+      setAllTableData(Object.values(mergedMap));
+      
+      // Set additional info
+      setAdditionalInfo(data.additional_info || {});
+    } catch (error) {
+      console.error("Processing failed:", error);
+      setError(`Processing failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    return status?.toLowerCase() === "exists"
+      ? "text-green-600 bg-green-100"
+      : status?.toLowerCase() === "missing"
+      ? "text-red-600 bg-red-100"
+      : "text-gray-600 bg-gray-100";
   };
 
   return (
@@ -108,252 +621,143 @@ export default function ContractsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Contract Management</h1>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Contract Management
+            </h1>
             <p className="text-muted-foreground mt-1">
-              Manage vendor contracts, agreements, and compliance documentation
+              Upload and process your contracts
             </p>
           </div>
-          <div className="mt-4 md:mt-0 flex space-x-2">
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
-            <Button className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600">
-              <Plus className="h-4 w-4 mr-2" />
-              New Contract
-            </Button>
+        </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+            {error}
           </div>
+        )}
+
+        {/* Upload + Process Controls */}
+        <div className="flex gap-3">
+          <input
+            type="file"
+            id="fileInput"
+            accept=".pdf"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <Button
+            onClick={() => document.getElementById("fileInput")?.click()}
+            className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600"
+            disabled={isUploading || isProcessing}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Choose File
+          </Button>
+          <Button
+            onClick={handleUpload}
+            disabled={!selectedFile || isUploading || isProcessing}
+          >
+            {isUploading ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              "Upload Contract"
+            )}
+          </Button>
+          <Button
+            onClick={handleProcess}
+            disabled={!uploadedFileName || isUploading || isProcessing}
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <FileCheck className="h-4 w-4 mr-2" />
+                Process Contract
+              </>
+            )}
+          </Button>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Contracts</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+        {/* Additional Information */}
+        {(additionalInfo.expiry_date || additionalInfo.contract_value) && (
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Contract Details</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">89</div>
-              <p className="text-xs text-muted-foreground">
-                +5% from last month
-              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {additionalInfo.expiry_date && (
+                  <div className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2 text-blue-500" />
+                    <div>
+                      <p className="text-sm font-medium">Expiry Date</p>
+                      <p className="text-lg">{additionalInfo.expiry_date}</p>
+                    </div>
+                  </div>
+                )}
+                {additionalInfo.contract_value && (
+                  <div className="flex items-center">
+                    <DollarSign className="h-5 w-5 mr-2 text-green-500" />
+                    <div>
+                      <p className="text-sm font-medium">Contract Value</p>
+                      <p className="text-lg">{additionalInfo.contract_value}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
+        )}
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Contracts</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">76</div>
-              <p className="text-xs text-muted-foreground">
-                85% of total
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$12.4M</div>
-              <p className="text-xs text-muted-foreground">
-                Annual contract value
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Expiring Soon</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">8</div>
-              <p className="text-xs text-muted-foreground">
-                Within 30 days
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Search and Filters */}
-        <Card>
+        {/* Unified Table */}
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle>Contract Search</CardTitle>
-            <CardDescription>Search and filter contracts by various criteria</CardDescription>
+            <CardTitle>Contract Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    placeholder="Search contracts by vendor, title, or ID..."
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline">Status</Button>
-                <Button variant="outline">Type</Button>
-                <Button variant="outline">Date Range</Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Contracts Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Contracts Overview</CardTitle>
-            <CardDescription>
-              Complete list of vendor contracts with status and key details
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Contract ID</TableHead>
-                    <TableHead>Vendor</TableHead>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Period</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {contracts.map((contract) => (
-                    <TableRow key={contract.id}>
-                      <TableCell className="font-medium">{contract.id}</TableCell>
-                      <TableCell>{contract.vendor}</TableCell>
-                      <TableCell className="max-w-xs truncate">{contract.title}</TableCell>
-                      <TableCell className="font-semibold">{contract.value}</TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          <div>{contract.startDate}</div>
-                          <div className="text-muted-foreground">to {contract.endDate}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          {getStatusIcon(contract.status)}
-                          {getStatusBadge(contract.status)}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{contract.type}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+            {allTableData.length > 0 ? (
+              <div className="overflow-x-auto w-full">
+                <Table className="min-w-full">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[15%]">Section</TableHead>
+                      <TableHead className="w-[15%]">Item</TableHead>
+                      <TableHead className="w-[10%]">Status</TableHead>
+                      <TableHead className="w-[60%]">Detail</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {allTableData.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{row.section}</TableCell>
+                        <TableCell>{row.item}</TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded ${getStatusColor(row.status)}`}>
+                            {row.status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="break-words max-w-[300px]">
+                          {row.detail}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-sm">
+                {isProcessing ? "Processing contract..." : "Process a contract to see results."}
+              </p>
+            )}
           </CardContent>
         </Card>
-
-        {/* Contract Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Contract Types Distribution</CardTitle>
-              <CardDescription>Breakdown of contracts by agreement type</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm">Service Agreement</span>
-                  </div>
-                  <span className="text-sm font-medium">45%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-sm">Fixed Price</span>
-                  </div>
-                  <span className="text-sm font-medium">25%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                    <span className="text-sm">Subscription</span>
-                  </div>
-                  <span className="text-sm font-medium">20%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm">Project-based</span>
-                  </div>
-                  <span className="text-sm font-medium">10%</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Upcoming Renewals</CardTitle>
-              <CardDescription>Contracts requiring attention in the next 90 days</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">Global Systems Ltd</p>
-                    <p className="text-xs text-muted-foreground">Network Security Services</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-orange-600">30 days</p>
-                    <p className="text-xs text-muted-foreground">$650,000</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">TechCorp Solutions</p>
-                    <p className="text-xs text-muted-foreground">Software Development</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-blue-600">60 days</p>
-                    <p className="text-xs text-muted-foreground">$850,000</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">InnovateLab</p>
-                    <p className="text-xs text-muted-foreground">R&D Services</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-blue-600">90 days</p>
-                    <p className="text-xs text-muted-foreground">$1,100,000</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </DashboardLayout>
   );

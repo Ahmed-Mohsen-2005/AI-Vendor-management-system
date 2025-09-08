@@ -76,7 +76,7 @@ export default function InvoicingPage() {
       });
 
       if (!response.ok) {
-        throw new Error(Server error: ${response.status});
+        throw new Error(`Server error: ${response.status}`);
       }
 
       const data: InvoiceResult = await response.json();
