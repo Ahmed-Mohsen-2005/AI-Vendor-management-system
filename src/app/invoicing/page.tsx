@@ -5,7 +5,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Upload, DollarSign, Download, Trash2 } from "lucide-react";
-import { useState } from "react";
 
 // --- Types for backend response ---
 interface InvoiceResultItem {
